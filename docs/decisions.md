@@ -37,3 +37,10 @@ Este documento conservará decisiones técnicas junto con su contexto y justific
 - Decisión: validar y normalizar los datos de entrada con Zod y hashear la contraseña mediante Argon2id antes de abrir la transacción de PostgreSQL. Los parámetros se centralizan junto al servicio para permitir su ajuste posterior.
 - Decisión: el repositorio de registro usa `db.transaction()` exclusivamente para las inserciones de `users`, `user_profiles` y `body_weight_entries`; esto garantiza rollback real ante cualquier error de persistencia. Las pruebas unitarias verifican la atomicidad lógica mediante dependencias inyectables; una prueba de integración de rollback contra PostgreSQL podrá añadirse posteriormente.
 - Decisión: solo una violación PostgreSQL `23505` de la constraint `users_email_unique` se traduce al error de dominio de correo duplicado.
+
+### Persistencia de sesiones de autenticación
+
+- Estado: aceptada
+- Contexto: la autenticación persistente requiere soportar varias sesiones por usuario y permitir su invalidación posterior, sin almacenar credenciales de sesión en texto plano.
+- Decisión: usar `auth_sessions` con UUID como clave primaria, relación 1:N hacia `users` y `ON DELETE CASCADE`. Cada sesión tiene expiración explícita, sin `updated_at`, y se indexa por usuario y por expiración.
+- Decisión: el token original nunca se persistirá. Se almacenará exclusivamente `SHA-256(token)` codificado como hexadecimal; por ello `token_hash` tiene una longitud lógica fija de 64 caracteres. La generación y hashing del token se implementarán en una iteración posterior.

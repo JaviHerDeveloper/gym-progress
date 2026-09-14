@@ -17,5 +17,6 @@ El modelo inicial comprende:
 - `users`: identidad persistida del usuario, con UUID como clave primaria y correo único.
 - `user_profiles`: perfil 1:1 con `users`, identificado por `user_id` único y eliminado en cascada junto con su usuario.
 - `body_weight_entries`: historial 1:N de peso corporal. Cada entrada conserva peso y fecha/hora de medición, incluso cuando corresponde a una fecha anterior. Un índice compuesto en `(user_id, measured_at)` respalda las consultas cronológicas por usuario.
+- `auth_sessions`: sesiones persistentes 1:N con `users`. Conserva exclusivamente el hash hexadecimal del token, su expiración y la fecha de creación. Las sesiones se eliminan en cascada al eliminar al usuario y tienen índices por usuario y expiración.
 
 Los timestamps usan `timestamptz`. `created_at`, `updated_at` y `measured_at` tienen un valor inicial de la hora actual; las futuras operaciones de aplicación deberán establecer `updated_at` explícitamente al modificar una fila. El peso actual se deriva del historial y no se duplica en otra tabla.

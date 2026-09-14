@@ -62,3 +62,12 @@ Por ahora no se implementarán:
 - USR-31: Si falla cualquiera de las operaciones necesarias para crear la cuenta, no deberá persistirse información parcial.
 - USR-32: El correo electrónico deberá normalizarse mediante trim y conversión a minúsculas antes de persistirse.
 - USR-33: La contraseña deberá almacenarse únicamente mediante un hash seguro.
+
+### Persistencia de sesión
+
+- USR-34: Después de registrarse correctamente, el usuario deberá quedar autenticado automáticamente.
+- USR-35: La autenticación deberá persistir aunque el usuario cierre y vuelva a abrir la PWA.
+- USR-36: La sesión inicial tendrá una vigencia de 90 días.
+- USR-37: El usuario podrá cerrar su sesión actual manualmente.
+- USR-38: Cerrar sesión deberá invalidar la sesión correspondiente en el servidor.
+- USR-39: La aplicación podrá soportar varias sesiones simultáneas para un mismo usuario.
