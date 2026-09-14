@@ -9,6 +9,10 @@ export type PreparedSessionToken = {
   expiresAt: Date;
 };
 
+export function hashSessionToken(token: string): string {
+  return createHash('sha256').update(token).digest('hex');
+}
+
 type CreateSessionTokenDependencies = {
   now?: () => Date;
   randomBytes?: (size: number) => Buffer;
@@ -19,7 +23,7 @@ export function createSessionToken({
   randomBytes = nativeRandomBytes,
 }: CreateSessionTokenDependencies = {}): PreparedSessionToken {
   const token = randomBytes(32).toString('base64url');
-  const tokenHash = createHash('sha256').update(token).digest('hex');
+  const tokenHash = hashSessionToken(token);
   const expiresAt = new Date(now().getTime() + SESSION_DURATION_MS);
 
   return { token, tokenHash, expiresAt };

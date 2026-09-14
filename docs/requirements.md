@@ -85,3 +85,12 @@ Por ahora no se implementarán:
 - USR-48: Un intento de registro con un correo ya existente deberá responder con HTTP 409.
 - USR-49: Un payload de registro inválido deberá responder con HTTP 400.
 - USR-50: Los errores inesperados deberán responder con HTTP 500 sin exponer detalles internos.
+
+### Validación de sesión
+
+- USR-51: El sistema deberá poder validar una sesión a partir del token recibido del cliente.
+- USR-52: El token original nunca deberá buscarse ni almacenarse directamente; deberá transformarse mediante SHA-256 antes de consultar la base de datos.
+- USR-53: Una sesión solamente será válida si existe en `auth_sessions` y su fecha de expiración es posterior al momento actual.
+- USR-54: Una sesión inexistente o expirada deberá considerarse no autenticada.
+- USR-55: La validación de una sesión válida deberá permitir obtener los datos seguros del usuario asociado.
+- USR-56: La validación nunca deberá exponer `password_hash`, `token_hash` ni otros datos internos de autenticación.

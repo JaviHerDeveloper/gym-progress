@@ -56,3 +56,8 @@ Este documento conservará decisiones técnicas junto con su contexto y justific
 - Estado: aceptada
 - Decisión: exponer el registro mediante `POST /api/auth/register`, reutilizando exclusivamente el caso de uso de registro completo. El token se entrega solo en la cookie `gp_session`, configurada como HttpOnly, SameSite=Lax, Path=/, con la expiración de la sesión y Secure únicamente en producción.
 - Decisión: CORS permite exclusivamente el origen configurado mediante `CORS_ORIGIN` y habilita credenciales. La configuración de entorno se resuelve en el arranque de la API y se inyecta explícitamente en el factory de Express.
+
+### Validación interna de sesiones
+
+- Estado: aceptada
+- Decisión: la validación transforma el token recibido mediante la misma función SHA-256 usada al crear sesiones y consulta únicamente su hash. Una sesión es válida solo cuando existe y `expires_at > now`; sesiones expiradas no se eliminan automáticamente en esta iteración.
