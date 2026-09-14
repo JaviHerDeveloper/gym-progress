@@ -71,3 +71,4 @@ Por ahora no se implementarán:
 - USR-37: El usuario podrá cerrar su sesión actual manualmente.
 - USR-38: Cerrar sesión deberá invalidar la sesión correspondiente en el servidor.
 - USR-39: La aplicación podrá soportar varias sesiones simultáneas para un mismo usuario.
+- USR-40: La creación inicial de la cuenta y de su primera sesión de autenticación deberá ser atómica. Si no es posible crear la sesión inicial, tampoco deberán persistirse el usuario, perfil ni primera medición de peso.

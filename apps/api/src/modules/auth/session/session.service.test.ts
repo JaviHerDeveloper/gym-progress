@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
 
-import { createCreateSessionService, SESSION_DURATION_MS } from './session.service.js';
+import { createCreateSessionService } from './session.service.js';
+import { SESSION_DURATION_MS } from './session-token.js';
 import type { CreateSessionPersistenceInput, SessionRepository } from './session.types.js';
 
 class RecordingSessionRepository implements SessionRepository {
