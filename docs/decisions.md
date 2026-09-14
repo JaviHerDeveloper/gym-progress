@@ -61,3 +61,8 @@ Este documento conservará decisiones técnicas junto con su contexto y justific
 
 - Estado: aceptada
 - Decisión: la validación transforma el token recibido mediante la misma función SHA-256 usada al crear sesiones y consulta únicamente su hash. Una sesión es válida solo cuando existe y `expires_at > now`; sesiones expiradas no se eliminan automáticamente en esta iteración.
+
+### Consulta del usuario autenticado
+
+- Estado: aceptada
+- Decisión: `GET /api/auth/me` obtiene el token exclusivamente de `gp_session` mediante parsing seguro del header Cookie y lo entrega a la validación interna. Una cookie presente pero inválida se elimina en el cliente con los mismos atributos de seguridad, sin borrar sesiones de PostgreSQL; una falla inesperada responde 500 sin eliminarla.

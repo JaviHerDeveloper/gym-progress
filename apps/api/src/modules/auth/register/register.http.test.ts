@@ -28,7 +28,12 @@ async function withServer(
   run: (baseUrl: string) => Promise<void>,
 ): Promise<void> {
   const server = createServer(
-    createApp({ registerUserWithInitialSession, corsOrigin, isProduction }),
+    createApp({
+      registerUserWithInitialSession,
+      validateSession: async () => null,
+      corsOrigin,
+      isProduction,
+    }),
   );
 
   await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));

@@ -94,3 +94,14 @@ Por ahora no se implementarán:
 - USR-54: Una sesión inexistente o expirada deberá considerarse no autenticada.
 - USR-55: La validación de una sesión válida deberá permitir obtener los datos seguros del usuario asociado.
 - USR-56: La validación nunca deberá exponer `password_hash`, `token_hash` ni otros datos internos de autenticación.
+
+### Identificación del usuario autenticado
+
+- USR-57: La API deberá permitir consultar el usuario correspondiente a la sesión actual.
+- USR-58: El endpoint de usuario actual deberá obtener el token únicamente desde la cookie `gp_session`.
+- USR-59: Una sesión válida deberá responder con los datos seguros del usuario autenticado.
+- USR-60: Si la cookie no existe, la API deberá responder HTTP 401.
+- USR-61: Si el token no corresponde a una sesión válida o la sesión está expirada, la API deberá responder HTTP 401.
+- USR-62: Una cookie correspondiente a una sesión inválida o expirada deberá eliminarse del cliente.
+- USR-63: El endpoint de usuario actual no deberá renovar ni extender automáticamente la expiración de la sesión.
+- USR-64: La respuesta nunca deberá exponer tokens, hashes, contraseña ni información interna de autenticación.

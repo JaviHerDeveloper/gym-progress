@@ -1,14 +1,17 @@
 import cors from 'cors';
 import express, { type ErrorRequestHandler } from 'express';
 
-import { createAuthRouter } from './modules/auth/register/register.routes.js';
+import { createRegisterRouter } from './modules/auth/register/register.routes.js';
 import type { RegisterUserInput } from './modules/auth/register/register.schema.js';
 import type { RegisteredUserWithInitialSession } from './modules/auth/complete-registration/complete-registration.types.js';
+import { createSessionRouter } from './modules/auth/session/session.routes.js';
+import type { ValidatedSession } from './modules/auth/session/session.types.js';
 
 type AppDependencies = {
   registerUserWithInitialSession: (
     input: RegisterUserInput,
   ) => Promise<RegisteredUserWithInitialSession>;
+  validateSession: (token: string) => Promise<ValidatedSession | null>;
   corsOrigin: string;
   isProduction: boolean;
 };
@@ -39,6 +42,7 @@ const jsonErrorHandler: ErrorRequestHandler = (error, _request, response, next) 
 
 export function createApp({
   registerUserWithInitialSession,
+  validateSession,
   corsOrigin,
   isProduction,
 }: AppDependencies) {
@@ -48,11 +52,12 @@ export function createApp({
   app.use(express.json());
   app.use(
     '/api/auth',
-    createAuthRouter({
+    createRegisterRouter({
       registerUserWithInitialSession,
       isProduction,
     }),
   );
+  app.use('/api/auth', createSessionRouter({ validateSession, isProduction }));
   app.use(jsonErrorHandler);
 
   return app;
