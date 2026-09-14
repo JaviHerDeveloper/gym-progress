@@ -1,0 +1,13 @@
+{
+  "name": "gym-progress",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=@gym-progress/web",
+    "dev:api": "npm run dev --workspace=@gym-progress/api",
+    "build": "npm run build --workspace=@gym-progress/shared && npm run build --workspace=@gym-progress/api && npm run build --workspace=@gym-progress/web",
+    "typecheck": "npm run typecheck --workspace=@gym-progress/shared && npm run typecheck --workspace=@gym-progress/api && npm run typecheck --workspace=@gym-progress/web"
+  },
+  "engines": { "node": ">=22" }
+}
