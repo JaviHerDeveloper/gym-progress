@@ -72,3 +72,16 @@ Por ahora no se implementarán:
 - USR-38: Cerrar sesión deberá invalidar la sesión correspondiente en el servidor.
 - USR-39: La aplicación podrá soportar varias sesiones simultáneas para un mismo usuario.
 - USR-40: La creación inicial de la cuenta y de su primera sesión de autenticación deberá ser atómica. Si no es posible crear la sesión inicial, tampoco deberán persistirse el usuario, perfil ni primera medición de peso.
+
+### Registro HTTP y cookie de sesión
+
+- USR-41: El registro deberá estar disponible mediante un endpoint HTTP de la API.
+- USR-42: Cuando el registro termine correctamente, la API deberá responder con estado HTTP 201.
+- USR-43: La sesión creada durante el registro deberá entregarse al navegador mediante una cookie HttpOnly.
+- USR-44: El token de sesión nunca deberá incluirse en el cuerpo JSON de una respuesta.
+- USR-45: La cookie de sesión deberá utilizar SameSite=Lax y Path=/.
+- USR-46: La cookie deberá utilizar Secure en entornos de producción.
+- USR-47: La expiración de la cookie deberá coincidir con la expiración de la sesión almacenada en el servidor.
+- USR-48: Un intento de registro con un correo ya existente deberá responder con HTTP 409.
+- USR-49: Un payload de registro inválido deberá responder con HTTP 400.
+- USR-50: Los errores inesperados deberán responder con HTTP 500 sin exponer detalles internos.

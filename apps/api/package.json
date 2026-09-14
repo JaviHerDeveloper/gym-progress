@@ -8,18 +8,20 @@
     "start": "tsx src/server.ts",
     "db:generate": "drizzle-kit generate --config=drizzle.config.ts",
     "db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
-    "test": "tsx --test src/modules/auth/register/register.service.test.ts src/modules/auth/session/session.service.test.ts src/modules/auth/complete-registration/complete-registration.test.ts",
+    "test": "tsx --test src/modules/auth/register/register.service.test.ts src/modules/auth/session/session.service.test.ts src/modules/auth/complete-registration/complete-registration.test.ts src/modules/auth/register/register.http.test.ts",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "argon2": "0.45.1",
+    "cors": "2.8.6",
     "drizzle-orm": "0.45.2",
     "express": "^5.1.0",
     "pg": "8.23.0",
     "zod": "4.6.5"
   },
   "devDependencies": {
+    "@types/cors": "2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^22.0.0",
     "@types/pg": "8.23.1",

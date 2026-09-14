@@ -50,3 +50,9 @@ Este documento conservará decisiones técnicas junto con su contexto y justific
 - Estado: aceptada
 - Contexto: USR-40 exige que la cuenta, el perfil, la primera medición y la primera sesión no puedan quedar persistidos de forma parcial.
 - Decisión: validar, hashear la contraseña y preparar la sesión antes de abrir la transacción. Una única transacción de PostgreSQL comparte el mismo executor para insertar `users`, `user_profiles`, `body_weight_entries` y `auth_sessions`; solo el hash del token llega a la persistencia.
+
+### Registro HTTP y entrega de sesión por cookie
+
+- Estado: aceptada
+- Decisión: exponer el registro mediante `POST /api/auth/register`, reutilizando exclusivamente el caso de uso de registro completo. El token se entrega solo en la cookie `gp_session`, configurada como HttpOnly, SameSite=Lax, Path=/, con la expiración de la sesión y Secure únicamente en producción.
+- Decisión: CORS permite exclusivamente el origen configurado mediante `CORS_ORIGIN` y habilita credenciales. La configuración de entorno se resuelve en el arranque de la API y se inyecta explícitamente en el factory de Express.

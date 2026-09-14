@@ -1,7 +1,14 @@
-import express from 'express';
+import { createApp } from './app-factory.js';
+import { registerUserWithInitialSession } from './modules/auth/complete-registration/register-user-with-initial-session.js';
 
-export const app = express();
+const corsOrigin = process.env.CORS_ORIGIN;
 
-app.use(express.json());
+if (!corsOrigin) {
+  throw new Error('CORS_ORIGIN must be configured.');
+}
 
-// Domain routes will be registered here as modules are introduced.
+export const app = createApp({
+  registerUserWithInitialSession,
+  corsOrigin,
+  isProduction: process.env.NODE_ENV === 'production',
+});
