@@ -43,4 +43,4 @@ Este documento conservará decisiones técnicas junto con su contexto y justific
 - Estado: aceptada
 - Contexto: la autenticación persistente requiere soportar varias sesiones por usuario y permitir su invalidación posterior, sin almacenar credenciales de sesión en texto plano.
 - Decisión: usar `auth_sessions` con UUID como clave primaria, relación 1:N hacia `users` y `ON DELETE CASCADE`. Cada sesión tiene expiración explícita, sin `updated_at`, y se indexa por usuario y por expiración.
-- Decisión: el token original nunca se persistirá. Se almacenará exclusivamente `SHA-256(token)` codificado como hexadecimal; por ello `token_hash` tiene una longitud lógica fija de 64 caracteres. La generación y hashing del token se implementarán en una iteración posterior.
+- Decisión: el token original nunca se persistirá. Se almacena exclusivamente `SHA-256(token)` codificado como hexadecimal; por ello `token_hash` tiene una longitud lógica fija de 64 caracteres. El servicio interno usa `randomBytes(32)` y `createHash('sha256')` de `node:crypto`, con una vigencia fija centralizada de 90 días.
