@@ -53,3 +53,12 @@ Por ahora no se implementarán:
 - eliminación de cuenta;
 - roles administrativos;
 - gráficas de evolución del peso.
+
+### Registro y sesión inicial
+
+- USR-28: Al completar correctamente el registro, el usuario deberá quedar autenticado automáticamente.
+- USR-29: El usuario no deberá ser redirigido nuevamente a la pantalla de login después de registrarse.
+- USR-30: La creación del usuario, perfil y primera medición de peso deberá realizarse de forma atómica.
+- USR-31: Si falla cualquiera de las operaciones necesarias para crear la cuenta, no deberá persistirse información parcial.
+- USR-32: El correo electrónico deberá normalizarse mediante trim y conversión a minúsculas antes de persistirse.
+- USR-33: La contraseña deberá almacenarse únicamente mediante un hash seguro.
