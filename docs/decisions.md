@@ -77,3 +77,8 @@ Este documento conservará decisiones técnicas junto con su contexto y justific
 
 - Estado: aceptada
 - Decisión: exponer `POST /api/auth/login` mediante un controller del dominio de login que reutiliza el caso de uso interno sin repetir autenticación. Solo tras un resultado correcto entrega el token mediante la misma cookie `gp_session` utilizada por registro; los errores de validación, credenciales e infraestructura no escriben ni eliminan cookies.
+
+### Invalidación interna de sesiones
+
+- Estado: aceptada
+- Decisión: la invalidación recibe el token original, omite consultas para valores vacíos o compuestos solo por espacios y, para cualquier otro valor, calcula el hash SHA-256 con la misma primitiva usada por creación y validación. El repository ejecuta directamente un `DELETE` por `token_hash`, sin búsqueda previa; la inexistencia de una fila es exitosa e idempotente y no afecta otras sesiones.

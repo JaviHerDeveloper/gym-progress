@@ -28,3 +28,7 @@ export type ValidatedSession = {
 export interface SessionValidationRepository {
   findSessionByTokenHash(tokenHash: string): Promise<ValidatedSession | null>;
 }
+
+export interface SessionInvalidationRepository {
+  deleteSessionByTokenHash(tokenHash: string): Promise<void>;
+}

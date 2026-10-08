@@ -126,3 +126,12 @@ Por ahora no se implementarán:
 - USR-77: Un correo inexistente y una contraseña incorrecta deberán responder HTTP 401 con el mismo error público.
 - USR-78: Un payload inválido deberá responder HTTP 400.
 - USR-79: Un error interno inesperado deberá responder HTTP 500 sin exponer información interna.
+
+### Cierre de sesión
+
+- USR-80: El usuario podrá cerrar únicamente su sesión actual.
+- USR-81: Cerrar sesión deberá invalidar en el servidor la sesión identificada por la cookie `gp_session`.
+- USR-82: El token original nunca deberá buscarse directamente en PostgreSQL; deberá transformarse mediante SHA-256.
+- USR-83: Cerrar una sesión inexistente deberá ser una operación idempotente y no producir un error.
+- USR-84: Cerrar sesión no deberá afectar otras sesiones activas del mismo usuario.
+- USR-85: Después de cerrar sesión correctamente, la cookie `gp_session` deberá eliminarse del cliente.

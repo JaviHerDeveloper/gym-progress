@@ -6,6 +6,7 @@ import type * as schema from '../../../db/schema/index.js';
 
 import type {
   CreateSessionPersistenceInput,
+  SessionInvalidationRepository,
   SessionRepository,
   SessionValidationRepository,
   ValidatedSession,
@@ -13,6 +14,7 @@ import type {
 
 type Database = NodePgDatabase<typeof schema>;
 type SessionExecutor = Pick<Database, 'insert'>;
+type SessionDeletionExecutor = Pick<Database, 'delete'>;
 
 export async function insertAuthSession(
   executor: SessionExecutor,
@@ -25,7 +27,16 @@ export async function insertAuthSession(
   });
 }
 
-export class DrizzleSessionRepository implements SessionRepository, SessionValidationRepository {
+export async function deleteAuthSessionByTokenHash(
+  executor: SessionDeletionExecutor,
+  tokenHash: string,
+): Promise<void> {
+  await executor.delete(authSessions).where(eq(authSessions.tokenHash, tokenHash));
+}
+
+export class DrizzleSessionRepository
+  implements SessionRepository, SessionValidationRepository, SessionInvalidationRepository
+{
   constructor(private readonly database: Database) {}
 
   async createSession(input: CreateSessionPersistenceInput): Promise<void> {
@@ -51,5 +62,9 @@ export class DrizzleSessionRepository implements SessionRepository, SessionValid
       .limit(1);
 
     return record ?? null;
+  }
+
+  async deleteSessionByTokenHash(tokenHash: string): Promise<void> {
+    await deleteAuthSessionByTokenHash(this.database, tokenHash);
   }
 }
