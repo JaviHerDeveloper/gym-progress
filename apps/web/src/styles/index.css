@@ -1,13 +1,24 @@
-:root {
-  font-family: system-ui, sans-serif;
-  color: #1a1a1a;
-  background: #ffffff;
+@import './tokens.css';
+@import './auth.css';
+
+* {
+  box-sizing: border-box;
 }
 
-body {
+html,
+body,
+#root {
+  min-width: 320px;
+  min-height: 100%;
   margin: 0;
 }
 
-main {
-  padding: 2rem;
+body {
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+button,
+input {
+  font: inherit;
 }

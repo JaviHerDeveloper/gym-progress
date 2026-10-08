@@ -1,5 +1,13 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+
+import '@fontsource/sora/400.css';
+import '@fontsource/sora/500.css';
+import '@fontsource/sora/600.css';
+import '@fontsource/sora/700.css';
+
+import { App } from './app/App';
 import './styles/index.css';
 
 const rootElement = document.getElementById('root');
@@ -10,8 +18,8 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <main>
-      <h1>Gym Progress</h1>
-    </main>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StrictMode>,
 );
