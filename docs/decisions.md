@@ -82,3 +82,8 @@ Este documento conservará decisiones técnicas junto con su contexto y justific
 
 - Estado: aceptada
 - Decisión: la invalidación recibe el token original, omite consultas para valores vacíos o compuestos solo por espacios y, para cualquier otro valor, calcula el hash SHA-256 con la misma primitiva usada por creación y validación. El repository ejecuta directamente un `DELETE` por `token_hash`, sin búsqueda previa; la inexistencia de una fila es exitosa e idempotente y no afecta otras sesiones.
+
+### Cierre de sesión HTTP
+
+- Estado: aceptada
+- Decisión: `POST /api/auth/logout` procesa solo la cookie `gp_session`. Si está presente, invalida la sesión antes de eliminar la cookie y responde 204 sin cuerpo; si está ausente, responde el mismo estado sin consultar persistencia ni escribir una cookie. Un fallo de invalidación responde 500 y preserva la cookie del cliente.

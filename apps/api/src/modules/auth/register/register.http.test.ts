@@ -35,6 +35,7 @@ async function withServer(
         throw new Error('Login is not used by these tests.');
       },
       validateSession: async () => null,
+      invalidateSession: async () => {},
       corsOrigin,
       isProduction,
     }),

@@ -135,3 +135,13 @@ Por ahora no se implementarán:
 - USR-83: Cerrar una sesión inexistente deberá ser una operación idempotente y no producir un error.
 - USR-84: Cerrar sesión no deberá afectar otras sesiones activas del mismo usuario.
 - USR-85: Después de cerrar sesión correctamente, la cookie `gp_session` deberá eliminarse del cliente.
+
+### Cierre de sesión HTTP
+
+- USR-86: El cierre de sesión deberá estar disponible mediante un endpoint HTTP.
+- USR-87: Un cierre de sesión correcto deberá responder HTTP 204 sin cuerpo.
+- USR-88: Si existe la cookie `gp_session`, el servidor deberá invalidar esa sesión antes de eliminar la cookie.
+- USR-89: Cerrar sesión sin una cookie existente deberá seguir considerándose exitoso.
+- USR-90: Una sesión ya inexistente deberá permitir completar el logout normalmente.
+- USR-91: Si ocurre un error interno al invalidar la sesión en el servidor, la API deberá responder HTTP 500 y no deberá eliminar la cookie del cliente.
+- USR-92: El logout únicamente deberá afectar la sesión actual y no las demás sesiones del mismo usuario.

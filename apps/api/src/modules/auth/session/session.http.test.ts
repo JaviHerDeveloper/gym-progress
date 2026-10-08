@@ -15,10 +15,12 @@ const validSession: ValidatedSession = {
 };
 
 type ValidateSession = (token: string) => Promise<ValidatedSession | null>;
+type InvalidateSession = (token: string) => Promise<void>;
 
 async function withServer(
   validateSession: ValidateSession,
   run: (baseUrl: string) => Promise<void>,
+  invalidateSession: InvalidateSession = async () => {},
 ): Promise<void> {
   const registerUserWithInitialSession = async (
     _input: RegisterUserInput,
@@ -32,6 +34,7 @@ async function withServer(
         throw new Error('Login is not used by these tests.');
       },
       validateSession,
+      invalidateSession,
       corsOrigin,
       isProduction: false,
     }),
@@ -153,4 +156,109 @@ test('returns a safe 500 without clearing the cookie when validation fails unexp
     assert.doesNotMatch(JSON.stringify(body), /credentials|token|password/i);
     assert.equal(response.headers.get('set-cookie'), null);
   });
+});
+
+test('invalidates the exact current cookie token before clearing it and returns 204', async () => {
+  const receivedTokens: string[] = [];
+  await withServer(
+    async () => null,
+    async (baseUrl) => {
+      const response = await fetch(`${baseUrl}/api/auth/logout`, {
+        method: 'POST',
+        headers: { cookie: 'gp_session=current-session-token; unrelated=ignored' },
+      });
+
+      assert.equal(response.status, 204);
+      assert.equal(await response.text(), '');
+      assertClearedSessionCookie(response.headers.get('set-cookie'));
+      assert.deepEqual(receivedTokens, ['current-session-token']);
+    },
+    async (token) => {
+      receivedTokens.push(token);
+    },
+  );
+});
+
+test('returns 204 without invalidating or clearing when gp_session is absent', async () => {
+  let invalidationCalls = 0;
+  await withServer(
+    async () => null,
+    async (baseUrl) => {
+      const response = await fetch(`${baseUrl}/api/auth/logout`, {
+        method: 'POST',
+        headers: { cookie: 'unrelated=token' },
+      });
+
+      assert.equal(response.status, 204);
+      assert.equal(await response.text(), '');
+      assert.equal(response.headers.get('set-cookie'), null);
+      assert.equal(invalidationCalls, 0);
+    },
+    async () => {
+      invalidationCalls += 1;
+    },
+  );
+});
+
+test('passes an empty gp_session value to the idempotent invalidation use case', async () => {
+  const receivedTokens: string[] = [];
+  await withServer(
+    async () => null,
+    async (baseUrl) => {
+      const response = await fetch(`${baseUrl}/api/auth/logout`, {
+        method: 'POST',
+        headers: { cookie: 'gp_session=' },
+      });
+
+      assert.equal(response.status, 204);
+      assertClearedSessionCookie(response.headers.get('set-cookie'));
+      assert.deepEqual(receivedTokens, ['']);
+    },
+    async (token) => {
+      receivedTokens.push(token);
+    },
+  );
+});
+
+test('clears the cookie after an idempotent invalidation of an unknown session', async () => {
+  const receivedTokens: string[] = [];
+  await withServer(
+    async () => null,
+    async (baseUrl) => {
+      const response = await fetch(`${baseUrl}/api/auth/logout`, {
+        method: 'POST',
+        headers: { cookie: 'gp_session=unknown-session-token' },
+      });
+
+      assert.equal(response.status, 204);
+      assertClearedSessionCookie(response.headers.get('set-cookie'));
+      assert.deepEqual(receivedTokens, ['unknown-session-token']);
+    },
+    async (token) => {
+      receivedTokens.push(token);
+    },
+  );
+});
+
+test('returns a safe 500 without clearing the cookie when invalidation fails', async () => {
+  await withServer(
+    async () => null,
+    async (baseUrl) => {
+      const response = await fetch(`${baseUrl}/api/auth/logout`, {
+        method: 'POST',
+        headers: { cookie: 'gp_session=possibly-valid-token' },
+      });
+      const body = await response.json();
+
+      assert.equal(response.status, 500);
+      assert.deepEqual(body, {
+        error: { code: 'INTERNAL_SERVER_ERROR', message: 'Ocurrió un error inesperado.' },
+      });
+      assert.doesNotMatch(JSON.stringify(body), /token|hash|password|database/i);
+      assert.equal(response.headers.get('set-cookie'), null);
+    },
+    async () => {
+      throw new Error('database token hash failure');
+    },
+  );
 });

@@ -16,6 +16,7 @@ type AppDependencies = {
   ) => Promise<RegisteredUserWithInitialSession>;
   loginUser: (input: LoginUserInput) => Promise<LoggedInUser>;
   validateSession: (token: string) => Promise<ValidatedSession | null>;
+  invalidateSession: (token: string) => Promise<void>;
   corsOrigin: string;
   isProduction: boolean;
 };
@@ -48,6 +49,7 @@ export function createApp({
   registerUserWithInitialSession,
   loginUser,
   validateSession,
+  invalidateSession,
   corsOrigin,
   isProduction,
 }: AppDependencies) {
@@ -63,7 +65,7 @@ export function createApp({
     }),
   );
   app.use('/api/auth', createLoginRouter({ loginUser, isProduction }));
-  app.use('/api/auth', createSessionRouter({ validateSession, isProduction }));
+  app.use('/api/auth', createSessionRouter({ validateSession, invalidateSession, isProduction }));
   app.use(jsonErrorHandler);
 
   return app;

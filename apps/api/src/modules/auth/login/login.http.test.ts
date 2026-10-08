@@ -36,6 +36,7 @@ async function withServer(
       registerUserWithInitialSession,
       loginUser,
       validateSession,
+      invalidateSession: async () => {},
       corsOrigin,
       isProduction,
     }),
