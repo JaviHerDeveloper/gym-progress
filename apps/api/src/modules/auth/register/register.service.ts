@@ -1,4 +1,4 @@
-import { hashPasswordWithArgon2id } from './password-hasher.js';
+import { hashPasswordWithArgon2id } from '../shared/password-hasher.js';
 import { registerUserInputSchema } from './register.schema.js';
 import type { RegisterUserInput } from './register.schema.js';
 import type { RegisteredUser, UserRegistrationRepository } from './register.types.js';

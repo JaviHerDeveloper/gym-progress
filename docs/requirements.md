@@ -105,3 +105,14 @@ Por ahora no se implementarán:
 - USR-62: Una cookie correspondiente a una sesión inválida o expirada deberá eliminarse del cliente.
 - USR-63: El endpoint de usuario actual no deberá renovar ni extender automáticamente la expiración de la sesión.
 - USR-64: La respuesta nunca deberá exponer tokens, hashes, contraseña ni información interna de autenticación.
+
+### Inicio de sesión
+
+- USR-65: El usuario podrá iniciar sesión mediante correo electrónico y contraseña.
+- USR-66: El correo utilizado para iniciar sesión deberá normalizarse mediante trim y conversión a minúsculas.
+- USR-67: Una combinación válida de correo y contraseña deberá crear una nueva sesión de autenticación.
+- USR-68: El usuario podrá mantener múltiples sesiones simultáneas en distintos dispositivos.
+- USR-69: Un correo inexistente y una contraseña incorrecta deberán producir el mismo error público de credenciales inválidas.
+- USR-70: El sistema no deberá revelar públicamente si un correo específico se encuentra registrado.
+- USR-71: La contraseña deberá verificarse utilizando Argon2id contra el hash almacenado.
+- USR-72: La respuesta de login nunca deberá exponer contraseña, password hash, token hash ni información interna.

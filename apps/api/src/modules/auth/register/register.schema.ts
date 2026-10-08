@@ -1,8 +1,10 @@
 import { z } from 'zod';
 
+import { emailSchema } from '../shared/email.schema.js';
+
 export const registerUserInputSchema = z.object({
   name: z.string().trim().min(2).max(100),
-  email: z.string().trim().toLowerCase().email().max(320),
+  email: emailSchema,
   password: z.string().min(8).max(128),
   heightCm: z.number().finite().min(100).max(250),
   weightKg: z.number().finite().min(30).max(300),
