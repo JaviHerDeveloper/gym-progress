@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import test from 'node:test';
 
 import { createApp } from '../../../app-factory.js';
+import type { LoggedInUser } from '../login/login.types.js';
 import type { RegisterUserInput } from '../register/register.schema.js';
 import type { RegisteredUserWithInitialSession } from '../complete-registration/complete-registration.types.js';
 import type { ValidatedSession } from './session.types.js';
@@ -27,6 +28,9 @@ async function withServer(
   const server = createServer(
     createApp({
       registerUserWithInitialSession,
+      loginUser: async (): Promise<LoggedInUser> => {
+        throw new Error('Login is not used by these tests.');
+      },
       validateSession,
       corsOrigin,
       isProduction: false,

@@ -72,3 +72,8 @@ Este documento conservará decisiones técnicas junto con su contexto y justific
 - Estado: aceptada
 - Decisión: la validación y normalización de correo se centraliza en una primitiva compartida del dominio `auth`, utilizada tanto por registro como por inicio de sesión. Las contraseñas no se transforman; se validan únicamente como strings de 8 a 128 caracteres.
 - Decisión: el inicio de sesión consulta el usuario por correo normalizado y verifica la contraseña con Argon2 contra el hash almacenado. La ausencia del usuario y una verificación que devuelve `false` producen el mismo `InvalidCredentialsError`; errores internos de Argon2 se propagan sin traducirse. Un inicio correcto crea una sesión adicional de 90 días y persiste exclusivamente su hash.
+
+### Inicio de sesión HTTP
+
+- Estado: aceptada
+- Decisión: exponer `POST /api/auth/login` mediante un controller del dominio de login que reutiliza el caso de uso interno sin repetir autenticación. Solo tras un resultado correcto entrega el token mediante la misma cookie `gp_session` utilizada por registro; los errores de validación, credenciales e infraestructura no escriben ni eliminan cookies.

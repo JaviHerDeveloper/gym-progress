@@ -4,6 +4,9 @@ import express, { type ErrorRequestHandler } from 'express';
 import { createRegisterRouter } from './modules/auth/register/register.routes.js';
 import type { RegisterUserInput } from './modules/auth/register/register.schema.js';
 import type { RegisteredUserWithInitialSession } from './modules/auth/complete-registration/complete-registration.types.js';
+import { createLoginRouter } from './modules/auth/login/login.routes.js';
+import type { LoginUserInput } from './modules/auth/login/login.schema.js';
+import type { LoggedInUser } from './modules/auth/login/login.types.js';
 import { createSessionRouter } from './modules/auth/session/session.routes.js';
 import type { ValidatedSession } from './modules/auth/session/session.types.js';
 
@@ -11,6 +14,7 @@ type AppDependencies = {
   registerUserWithInitialSession: (
     input: RegisterUserInput,
   ) => Promise<RegisteredUserWithInitialSession>;
+  loginUser: (input: LoginUserInput) => Promise<LoggedInUser>;
   validateSession: (token: string) => Promise<ValidatedSession | null>;
   corsOrigin: string;
   isProduction: boolean;
@@ -42,6 +46,7 @@ const jsonErrorHandler: ErrorRequestHandler = (error, _request, response, next) 
 
 export function createApp({
   registerUserWithInitialSession,
+  loginUser,
   validateSession,
   corsOrigin,
   isProduction,
@@ -57,6 +62,7 @@ export function createApp({
       isProduction,
     }),
   );
+  app.use('/api/auth', createLoginRouter({ loginUser, isProduction }));
   app.use('/api/auth', createSessionRouter({ validateSession, isProduction }));
   app.use(jsonErrorHandler);
 

@@ -116,3 +116,13 @@ Por ahora no se implementarán:
 - USR-70: El sistema no deberá revelar públicamente si un correo específico se encuentra registrado.
 - USR-71: La contraseña deberá verificarse utilizando Argon2id contra el hash almacenado.
 - USR-72: La respuesta de login nunca deberá exponer contraseña, password hash, token hash ni información interna.
+
+### Inicio de sesión HTTP
+
+- USR-73: El inicio de sesión deberá estar disponible mediante un endpoint HTTP de la API.
+- USR-74: Un login correcto deberá responder HTTP 200.
+- USR-75: Un login correcto deberá crear una nueva sesión y entregarla mediante la cookie `gp_session`.
+- USR-76: El token de sesión nunca deberá incluirse en el cuerpo JSON.
+- USR-77: Un correo inexistente y una contraseña incorrecta deberán responder HTTP 401 con el mismo error público.
+- USR-78: Un payload inválido deberá responder HTTP 400.
+- USR-79: Un error interno inesperado deberá responder HTTP 500 sin exponer información interna.
