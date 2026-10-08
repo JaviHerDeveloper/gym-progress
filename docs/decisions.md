@@ -87,3 +87,10 @@ Este documento conservará decisiones técnicas junto con su contexto y justific
 
 - Estado: aceptada
 - Decisión: `POST /api/auth/logout` procesa solo la cookie `gp_session`. Si está presente, invalida la sesión antes de eliminar la cookie y responde 204 sin cuerpo; si está ausente, responde el mismo estado sin consultar persistencia ni escribir una cookie. Un fallo de invalidación responde 500 y preserva la cookie del cliente.
+
+### Integración de autenticación en el cliente web
+
+- Estado: aceptada
+- Decisión: el frontend usa una capa fetch pequeña y tipada para los cuatro contratos de autenticación. Todas las solicitudes incluyen `credentials: 'include'`; los tokens de sesión permanecen exclusivamente en la cookie HttpOnly administrada por la API, sin Bearer tokens ni almacenamiento web.
+- Decisión: `AuthProvider` realiza el bootstrap con `/api/auth/me`, distingue un 401 esperado de errores de infraestructura y permite reintentar estos últimos. Las rutas públicas y protegidas se resuelven con guards declarativos de React Router.
+- Decisión: el origen de la API se expone mediante `VITE_API_URL`, documentado solo en `apps/web/.env.example`. Los formularios conservan las validaciones locales existentes y traducen únicamente códigos públicos del backend a feedback de interfaz.

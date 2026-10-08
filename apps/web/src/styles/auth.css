@@ -152,6 +152,18 @@
   transform: translateY(1px);
 }
 
+.auth-primary-button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.auth-form-error {
+  margin: 4px 0 -4px;
+  color: var(--color-danger);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .auth-footer-nav {
   display: flex;
   gap: 8px;
@@ -177,6 +189,58 @@
   color: var(--color-magenta);
   outline: 2px solid var(--color-magenta);
   outline-offset: 3px;
+}
+
+.auth-status-screen,
+.temporary-app-page {
+  box-sizing: border-box;
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: 24px;
+}
+
+.auth-status-screen {
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.auth-status-screen .auth-primary-button {
+  max-width: 260px;
+  margin-top: 20px;
+}
+
+.temporary-app-card {
+  box-sizing: border-box;
+  width: min(100%, 420px);
+  padding: 32px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.temporary-app-card h1 {
+  margin: 0 0 20px;
+  color: var(--color-text);
+  font-size: 28px;
+}
+
+.temporary-app-card p {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.temporary-app-card .auth-brand {
+  margin-bottom: 32px;
+}
+
+.temporary-app-email {
+  margin-top: 8px !important;
+  color: var(--color-text-secondary) !important;
+}
+
+.temporary-app-card .auth-primary-button {
+  margin-top: 28px;
 }
 
 @media (max-width: 640px) {

@@ -8,6 +8,12 @@ Este documento describirá la arquitectura, los límites entre aplicaciones y la
 
 El repositorio usa npm workspaces con un cliente React/Vite en `apps/web`, una API REST Express en `apps/api` y un paquete compartido mínimo en `packages/shared`.
 
+## Cliente web y autenticación
+
+El cliente en `apps/web` concentra la comunicación HTTP de autenticación en `src/services/api` y `src/features/auth/api`. Todas las solicitudes de autenticación usan `credentials: 'include'`; el navegador conserva la cookie HttpOnly `gp_session` y el frontend no lee, persiste ni reconstruye tokens.
+
+`AuthProvider` restaura la sesión mediante `GET /api/auth/me` al iniciar y expone estados explícitos de carga, autenticado, no autenticado y error recuperable. Los guards de React Router limitan `/login` y `/register` a visitantes, y `/app` a usuarios autenticados. El origen de la API se configura con `VITE_API_URL`; en desarrollo se usa `http://localhost:3000` cuando no se declara.
+
 ## Persistencia
 
 La persistencia de la API reside exclusivamente en `apps/api` y usa PostgreSQL con Drizzle ORM. La configuración de Drizzle se encuentra en `apps/api/drizzle.config.ts`; la conexión se mantiene separada en `apps/api/src/db/index.ts` y los schemas se exportan desde `apps/api/src/db/schema/index.ts`.

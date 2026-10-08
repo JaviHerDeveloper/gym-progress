@@ -8,6 +8,7 @@ import '@fontsource/sora/600.css';
 import '@fontsource/sora/700.css';
 
 import { App } from './app/App';
+import { AuthProvider } from './features/auth/context/AuthProvider';
 import './styles/index.css';
 
 const rootElement = document.getElementById('root');
@@ -19,7 +20,9 @@ if (!rootElement) {
 createRoot(rootElement).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 );
